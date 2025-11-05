@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>  // For usleep (Linux/Mac; use <windows.h> Sleep on Windows)
+
+#define WIDTH 40
+#define HEIGHT 20
+#define BALL 'O'
+#define DELAY 100000  // Microseconds (0.1s)
+
+int main() {
+    float x = WIDTH / 2.0, y = HEIGHT / 2.0;  // Ball position
+    float vx = 2.0, vy = 1.0;  // Velocity
+    float gravity = 0.1;  // Gravity effect
+
+    while (1) {
+        // Update physics
+        x += vx;
+        y += vy;
+        vy += gravity;  // Apply gravity
+
+        // Bounce off walls
+        if (x <= 0 || x >= WIDTH - 1) vx = -vx;
+        if (y <= 0 || y >= HEIGHT - 1) vy = -vy;
+
+        // Clear screen
+        system("clear");  // Use "cls" on Windows
+
+        // Draw the scene
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                if ((int)x == j && (int)y == i) {
+                    printf("\033[31m%c\033[0m", BALL);  // Red ball
+                } else {
+                    printf(" ");
+                }
+            }
+            printf("\n");
+        }
+
+        // Pause for animation
+        usleep(DELAY);
+    }
+    return 0;
+}
